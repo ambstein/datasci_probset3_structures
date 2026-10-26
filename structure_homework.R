@@ -123,6 +123,22 @@ glimpse(rs_all)
 
 #4 -- ANSWER
 
+#making new
+rs_all_new <- rs_all %>%
+  filter(Source == "New")
+glimpse(rs_all_new)
+
+#making old
+rs_all_old <- rs_all %>%
+  filter(Source == "Old")
+glimpse(rs_all_old)
+
+# joining
+rs_joined <- full_join(rs_all_new, rs_all_old,
+                       by = c("Artist", "Song"),
+                       suffix = c("_New", "_Old")
+                       )
+glimpse(rs_joined)
 
 
 
