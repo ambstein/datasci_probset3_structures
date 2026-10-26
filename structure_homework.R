@@ -256,8 +256,13 @@ top20 <- top20 %>%
 # overwrite top20 with the pivoted data (there should now be 20 rows!)
 
 #9 -- ANSWER
+?pivot_wider
 
-
+top20 <- top20 %>%
+  pivot_wider(names_from = "Style",
+              values_from = "Value"
+              )
+glimpse(top20)
 
 ### Question 10 ---------
 
@@ -269,11 +274,43 @@ top20 <- top20 %>%
 # Create a new factor called "season" that collapses each set of 3 months into a season "Winter", "Spring", etc.
 # Count the number of songs that were released in each season
 
-
-
 #10 -- ANSWER
+top20_joined <- top20 %>%
+  left_join(rs_joined, by = c("Artist", "Song"))
+glimpse(top20_joined)
 
+?month
+top20_joined <- top20_joined %>%
+  mutate(release_month = month(top20_joined$parsed_release_date, label = TRUE))
+glimpse(top20_joined)
 
+top20_joined$release_month <- top20_joined$release_month %>%
+  as.character()
+
+#top20_joined <- top20_joined %>%
+ # mutate(season = fct_collapse(release_month, 
+                          #     Winter = c("Dec", "Jan", "Feb"),
+                           #    Spring = c("Mar", "Apr", "May"),
+                            #   Summer = c("Jun", "Jul", "Aug"),
+                             #  Fall = c("Sep", "Oct", "Nov")
+                              # ))
+# I'm getting an error.... investigating ...
+unique(top20_joined$release_month)
+
+# there are no releases in Jan or Apr so I'm excluding them cause they're 
+#  causing issues
+
+top20_joined <- top20_joined %>%
+  mutate(season = fct_collapse(release_month, 
+                               Winter = c("Dec", "Feb"),
+                               Spring = c("Mar", "May"),
+                               Summer = c("Jun", "Jul", "Aug"),
+                               Fall = c("Sep", "Oct", "Nov")
+                               )
+         )
+# checking my work
+glimpse(top20_joined)
+fct_count(top20_joined$season)
 
 ### Question 11 ---------
 
@@ -284,5 +321,19 @@ top20 <- top20 %>%
 
 #11 -- ANSWER
 
+?fct_collapse
 
+top20_joined <- top20_joined %>%
+  mutate(quality = str_detect(Key, "m")) %>%
+  mutate(quality = ifelse(quality, "minor", "major")
+  )
 
+glimpse(top20_joined)
+
+top20_joined %>%
+  filter(quality == "minor") %>%
+  arrange(Rank_new)
+
+#YAAAAA I DID IT!
+
+#god only knows by the beach boys is the highest ranked song that uses a minor key (ranked #11)
