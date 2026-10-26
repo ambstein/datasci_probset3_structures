@@ -239,9 +239,15 @@ fct_count(new_lump, prop = TRUE)
 
 #8 -- ANSWER
 
+library(here)
+getwd()
+here()
 
+top20 <- read_csv("top_20.csv")
 
-
+?parse_date_time
+top20 <- top20 %>%
+  mutate(parsed_release_date = parse_date_time(top20$Release, "dmy"))
 
 ### Question 9 --------
 
@@ -249,7 +255,7 @@ fct_count(new_lump, prop = TRUE)
 # use pivot_wider to fix the issue so that bpm and key are columns
 # overwrite top20 with the pivoted data (there should now be 20 rows!)
 
-#ANSWER
+#9 -- ANSWER
 
 
 
@@ -265,7 +271,7 @@ fct_count(new_lump, prop = TRUE)
 
 
 
-#ANSWER
+#10 -- ANSWER
 
 
 
@@ -276,7 +282,7 @@ fct_count(new_lump, prop = TRUE)
 # Minor keys contain the lowercase letter "m". If there's no "m", it's Major
 # Figure out which is the top-ranked song (from Rank_New) that used a minor key
 
-#ANSWER
+#11 -- ANSWER
 
 
 
