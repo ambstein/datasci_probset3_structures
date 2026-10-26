@@ -39,7 +39,7 @@ load("rs_data.RData")
 
 view(rs_old)
 
-#1 ANSWER
+#1 -- ANSWER
 ?full_join
 rs_joined_orig <- full_join(rs_new, rs_old, by = c("Artist", "Song"))
 glimpse(rs_joined_orig)
@@ -58,7 +58,7 @@ view(rs_joined_orig)
 # You will run into a problem because the old dataset has rank/year as characters instead of integers
 # Make Rank and Year into integer variables for rs_old before binding them into rs_all
 
-#2 ANSWER
+#2 -- ANSWER
 rs_new <- rs_new %>%
   mutate("Source" = "New")
 glimpse(rs_new)
@@ -94,8 +94,11 @@ glimpse(rs_all)
 # Finally, read the documentation for the functions str_to_lower and str_trim
 # Use both functions to make all artists/song lowercase and remove any extra spaces
 
-#ANSWER
+#3 -- ANSWER
+rs_all <- rs_all %>%
+  str_remove_all("the")
 
+?str_remove_all
 
 ### Question 4 ----------
 
