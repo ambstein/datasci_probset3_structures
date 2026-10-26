@@ -60,11 +60,11 @@ view(rs_joined_orig)
 
 #2 -- ANSWER
 rs_new <- rs_new %>%
-  mutate("Source" = "New")
+  mutate("Source" = "new")
 glimpse(rs_new)
 
 rs_old <- rs_old %>%
-  mutate("Source" = "Old")
+  mutate("Source" = "old")
 glimpse(rs_old)
 
 ?bind_rows
@@ -125,18 +125,18 @@ glimpse(rs_all)
 
 #making new
 rs_all_new <- rs_all %>%
-  filter(Source == "New")
+  filter(Source == "new")
 glimpse(rs_all_new)
 
 #making old
 rs_all_old <- rs_all %>%
-  filter(Source == "Old")
+  filter(Source == "old")
 glimpse(rs_all_old)
 
 # joining
 rs_joined <- full_join(rs_all_new, rs_all_old,
                        by = c("Artist", "Song"),
-                       suffix = c("_New", "_Old")
+                       suffix = c("_new", "_old")
                        )
 glimpse(rs_joined)
 
@@ -156,17 +156,19 @@ glimpse(rs_joined)
 
 library(dplyr)
 #have to make rankings numeric vars before I can do math with them
-rs_joined$Rank_New <- rs_joined$Rank_New %>%
+rs_joined$Rank_new <- rs_joined$Rank_new %>%
   as.numeric()
-rs_joined$Rank_Old <- rs_joined$Rank_Old %>%
+rs_joined$Rank_old <- rs_joined$Rank_old %>%
   as.numeric()
+
+glimpse(rs_joined)
 
 # the bulk of Q4
 rs_joined <- rs_joined %>%
-  select(-c("Source_New", "Source_Old")) %>%
-  drop_na(Rank_New, Rank_Old) %>%
-  mutate(Rank_Change = Rank_Old - Rank_New) %>%
-  arrange(Rank_Change)
+  select(-c("Source_new", "Source_old")) %>%
+  drop_na(Rank_new, Rank_old) %>%
+  mutate(rank_change = Rank_old - Rank_new) %>%
+  arrange(rank_change)
 
 #checking my work
 glimpse(rs_joined)
@@ -179,9 +181,25 @@ glimpse(rs_joined)
 # Group by decade and summarize the mean rank_change for songs released in each decade (you don't have to save it)
 # Which decade improved the most?
 
-#ANSWER
+#6 -- ANSWER
 
+glimpse(rs_joined)
 
+#have to make variables numeric to do math with them
+rs_joined$Year_old <- rs_joined$Year_old %>%
+  as.numeric()
+rs_joined$Year_new <- rs_joined$Year_new %>%
+  as.numeric()
+
+#now I can do the thing
+rs_joined <- rs_joined %>%
+  mutate(decade_new = floor(Year_new / 10)*10) %>%
+  mutate(decade_old = floor(Year_old / 10)*10) %>%
+  mutate(decade_old = str_c(decade_old, "s")) %>%
+  mutate(decade_new = str_c(decade_new, "s")) #from stringr cheatsheet
+
+#checking my work
+glimpse(rs_joined)
 
 ### Question 7 ----------
 
@@ -190,7 +208,26 @@ glimpse(rs_joined)
 # Do fct_count on the lumped factor with the prop argument to see the 
 # proportion of songs in each of the top three decades (vs. all the rest)
 
-#ANSWER
+#7 -- ANSWER
+?fct_count
+fct_count(rs_joined$decade_old)
+fct_count(rs_joined$decade_new)
+
+?fct_lump
+old_lump <- fct_lump(rs_joined$decade_old,
+                     n = 3,
+                     other_level = "other"
+                     )
+glimpse(old_lump)
+
+new_lump <- fct_lump(rs_joined$decade_new,
+                     n = 3,
+                     other_level = "other"
+                     )
+glimpse(new_lump)
+
+fct_count(old_lump, prop = TRUE)
+fct_count(new_lump, prop = TRUE)
 
 
 
@@ -200,7 +237,10 @@ glimpse(rs_joined)
 # Release_Date isn't read in correctly as a date
 # Use parse_date_time to fix it
 
-#ANSWER
+#8 -- ANSWER
+
+
+
 
 
 ### Question 9 --------
