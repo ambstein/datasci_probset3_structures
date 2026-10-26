@@ -152,8 +152,24 @@ glimpse(rs_joined)
 # Save those changes to rs_joined
 # You should now be able to see how each song moved up/down in rankings between the two lists
 
-#ANSWER
+#5 -- ANSWER
 
+library(dplyr)
+#have to make rankings numeric vars before I can do math with them
+rs_joined$Rank_New <- rs_joined$Rank_New %>%
+  as.numeric()
+rs_joined$Rank_Old <- rs_joined$Rank_Old %>%
+  as.numeric()
+
+# the bulk of Q4
+rs_joined <- rs_joined %>%
+  select(-c("Source_New", "Source_Old")) %>%
+  drop_na(Rank_New, Rank_Old) %>%
+  mutate(Rank_Change = Rank_Old - Rank_New) %>%
+  arrange(Rank_Change)
+
+#checking my work
+glimpse(rs_joined)
 
 ### Question 6 ----------
 
