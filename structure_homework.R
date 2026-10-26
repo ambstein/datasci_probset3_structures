@@ -121,7 +121,9 @@ glimpse(rs_all)
 # Did the string cleaning improve matches? If so, there should be fewer rows of data (fewer duplicates)
 # in the new rs_joined compared to the original. Use nrow to check (there should be 799 rows)
 
-#ANSWER
+#4 -- ANSWER
+
+
 
 
 ### Question 5 ----------
