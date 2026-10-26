@@ -2,7 +2,7 @@
 #For full credit, provide answers for at least 8/11 questions
 
 #List names of students collaborating with: 
-
+# Sarah & Dylan
 ### SETUP: RUN THIS BEFORE STARTING ----------
 
 install.packages("rvest")
@@ -37,8 +37,16 @@ load("rs_data.RData")
 # In the viewer, take a look at the merge...what kinds of problems are there?
 # Why did some of the artist-song fail to match up?
 
-#ANSWER
+view(rs_old)
 
+#1 ANSWER
+?full_join
+rs_joined_orig <- full_join(rs_new, rs_old, by = c("Artist", "Song"))
+glimpse(rs_joined_orig)
+nrow(rs_joined_orig)
+view(rs_joined_orig)
+
+# lots of issues with NAs; 
 
 
 ### Question 2 ---------- 
@@ -49,7 +57,7 @@ load("rs_data.RData")
 # You will run into a problem because the old dataset has rank/year as characters instead of integers
 # Make Rank and Year into integer variables for rs_old before binding them into rs_all
 
-#ANSWER
+#2 ANSWER
 
 
 ### Question 3 ----------
