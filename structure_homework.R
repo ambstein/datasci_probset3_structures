@@ -46,7 +46,8 @@ glimpse(rs_joined_orig)
 nrow(rs_joined_orig)
 view(rs_joined_orig)
 
-# lots of issues with NAs; 
+# we have two columns for rank and two columns for year... not sure why and 
+#  unable to fix because R runs into an issue when I try joining by Year or Rank!
 
 
 ### Question 2 ---------- 
@@ -58,7 +59,31 @@ view(rs_joined_orig)
 # Make Rank and Year into integer variables for rs_old before binding them into rs_all
 
 #2 ANSWER
+rs_new <- rs_new %>%
+  mutate("Source" = "New")
+glimpse(rs_new)
 
+rs_old <- rs_old %>%
+  mutate("Source" = "Old")
+glimpse(rs_old)
+
+?bind_rows
+
+# rs_all <- bind_rows(rs_new, rs_old)
+
+# didn't work... ohh, looks like I need to change the variable types because R can't combine
+#  integer with character variables
+
+rs_new$Year <- rs_new$Year %>%
+  as.character()
+rs_new$Rank <- rs_new$Rank %>%
+  as.character()
+
+# NOW i should be able to bind rows...
+rs_all <- bind_rows(rs_new, rs_old)
+glimpse(rs_all)
+
+# Yay! it worked :) 
 
 ### Question 3 ----------
 
